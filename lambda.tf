@@ -32,7 +32,7 @@ resource "aws_lambda_function" "root_lambda" {
 resource "aws_lambda_permission" "allow_gateway" {
   statement_id  = "AllowExecutionFromGateway"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.test_lambda.function_name
+  function_name = aws_lambda_function.root_lambda.function_name
   principal     = "apigateway.amazonaws.com"
 }
 
