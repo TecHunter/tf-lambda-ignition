@@ -79,9 +79,9 @@ resource "aws_api_gateway_method" "get-ignition" {
 resource "aws_api_gateway_integration" "ApiProxyIntegration" {
   rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
   resource_id = aws_api_gateway_resource.ignition.id
-  http_method = aws_api_gateway_method.get-ignition.http_method
+  http_method = "GET"
 
-  type = "HTTP_PROXY"
+  type = "AWS"
   integration_http_method = "GET"
   uri                     = aws_lambda_function.root_lambda.invoke_arn
 }
