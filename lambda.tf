@@ -1,7 +1,7 @@
 data "archive_file" "lambda_zip" {
     type          = "zip"
     source_file   = templatefile(
-        "${file("${path.module}/handler.tpl")}",
+        "${path.module}/handler.tpl",
         {
             content = "${file("${path.module}/example.fcc")}"
         }
