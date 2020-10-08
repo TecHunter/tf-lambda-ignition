@@ -1,13 +1,11 @@
-data "template_file" "handler"{
-    template = "${file("${path.module}/handler.tpl")}"
-    vars {
-        content = "${file("${path.module}/example.fcc")}"
-    }
-}
-
 data "archive_file" "lambda_zip" {
     type          = "zip"
-    source_file   = "index.js"
+    source_file   = template_file(
+        "${file("${path.module}/handler.tpl")}",
+        {
+            content = "${file("${path.module}/example.fcc")}"
+        }
+    )
     output_path   = "lambda_function.zip"
 }
 

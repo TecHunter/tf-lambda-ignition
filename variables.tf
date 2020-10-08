@@ -3,6 +3,13 @@ variable "region" {
   type = string
 }
 
+variable "aws" {
+    default = {
+        id = ""
+        key=""
+    }
+}
+
 variable "profile" {
   default = "default"
   type = string
