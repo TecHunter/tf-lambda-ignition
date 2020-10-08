@@ -1,21 +1,3 @@
-resource "aws_api_gateway_rest_api" "ApiGateway" {
-  name = var.api_name
-  description = var.api_description
-}
-
-resource "aws_api_gateway_resource" "ignition" {
-  rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
-  parent_id = aws_api_gateway_rest_api.ApiGateway.root_resource_id
-}
-
-resource "aws_api_gateway_method" "get-ignition" {
-  rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
-  resource_id = aws_api_gateway_resource.ignition.id
-
-  http_method = "GET"
-  authorization = "NONE"
-}
-
 data "template_file" "handler"{
     template = "${file("${path.module}/handler.tpl")}"
     vars {
@@ -54,6 +36,35 @@ resource "aws_iam_role" "iam_for_lambda_tf" {
 
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
+
+#### METHODS
+# GET /
+resource "aws_api_gateway_method" "proxy_root" {
+   rest_api_id   = aws_api_gateway_rest_api.ApiGateway.id
+   resource_id   = aws_api_gateway_rest_api.ApiGateway.root_resource_id
+   http_method   = "GET"
+   authorization = "NONE"
+}
+
+resource "aws_api_gateway_rest_api" "ApiGateway" {
+  name = var.api_name
+  description = var.api_description
+}
+resource "aws_api_gateway_resource" "ignition" {
+  rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
+  parent_id = aws_api_gateway_rest_api.ApiGateway.root_resource_id
+  path_part = "ignition"
+}
+
+resource "aws_api_gateway_method" "get-ignition" {
+  rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
+  resource_id = aws_api_gateway_resource.ignition.id
+
+  http_method = "GET"
+  authorization = "NONE"
+}
+
+#############
 
 resource "aws_api_gateway_integration" "ApiProxyIntegration" {
   rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
