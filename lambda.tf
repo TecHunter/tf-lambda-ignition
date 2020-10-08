@@ -29,6 +29,7 @@ resource "aws_lambda_function" "root_lambda" {
   runtime          = "nodejs12.x"
 }
 
+###### IAM ROLE
 data "aws_iam_policy_document" "assume_role" {
   statement {
       actions= ["sts:AssumeRole"]
@@ -46,6 +47,7 @@ resource "aws_iam_role" "iam_for_lambda_tf" {
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
+###################### API #######################
 
 resource "aws_api_gateway_rest_api" "ApiGateway" {
   name = var.api_name
@@ -54,7 +56,7 @@ resource "aws_api_gateway_rest_api" "ApiGateway" {
 
 #### METHODS
 # GET /
-resource "aws_api_gateway_method" "root" {
+resource "aws_api_gateway_method" "get-root" {
    rest_api_id   = aws_api_gateway_rest_api.ApiGateway.id
    resource_id   = aws_api_gateway_rest_api.ApiGateway.root_resource_id
    http_method   = "GET"
@@ -91,11 +93,42 @@ resource "aws_api_gateway_integration" "ignition" {
 resource "aws_api_gateway_integration" "root" {
   rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
   resource_id = aws_api_gateway_rest_api.ApiGateway.root_resource_id
-  http_method = aws_api_gateway_method.root.http_method
+  http_method = aws_api_gateway_method.get-root.http_method
 
   type                    = "AWS_PROXY"
   integration_http_method = "POST"
   uri                     = aws_lambda_function.root_lambda.invoke_arn
+}
+
+resource "aws_api_gateway_method_response" "root_response_200" {
+  rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
+  resource_id = aws_api_gateway_rest_api.ApiGateway.root_resource_id
+  http_method = aws_api_gateway_method.get-root.http_method
+  status_code = "200"
+}
+
+resource "aws_api_gateway_integration_response" "ignition" {
+  rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
+  resource_id = aws_api_gateway_rest_api.ApiGateway.root_resource_id
+  http_method = aws_api_gateway_method.get-root.http_method
+  status_code = aws_api_gateway_method_response.root_response_200.status_code
+
+}
+
+
+resource "aws_api_gateway_method_response" "ignition_response_200" {
+  rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
+  resource_id = aws_api_gateway_resource.ignition.id
+  http_method = aws_api_gateway_method.get-ignition.http_method
+  status_code = "200"
+}
+
+resource "aws_api_gateway_integration_response" "ignition" {
+  rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
+  resource_id = aws_api_gateway_resource.ignition.id
+  http_method = aws_api_gateway_method.get-ignition.http_method
+  status_code = aws_api_gateway_method_response.ignition_response_200.status_code
+
 }
 
 resource "aws_api_gateway_deployment" "ApiDeployment" {
