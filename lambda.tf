@@ -1,12 +1,24 @@
-data "archive_file" "lambda_zip" {
-    type          = "zip"
-    source_file   = templatefile(
+data "template_file" "content" {
+  template = file("${path.module}/example.fcc")
+}
+
+data "template_file" "handler" {
+  template = templatefile(
         "${path.module}/handler.tpl",
         {
-            content = "${file("${path.module}/example.fcc")}"
+            content = data.template_file.content.rendered
         }
-    ).rendered
-    output_path   = "lambda_function.zip"
+    )
+}
+
+data "archive_file" "lambda_zip" {
+  type          = "zip"
+
+  output_path   = "lambda_function.zip"
+  source {
+    content  = data.template_file.handler.rendered
+    filename = "index.js"
+  }
 }
 
 resource "aws_lambda_function" "root_lambda" {
