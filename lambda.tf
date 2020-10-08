@@ -1,14 +1,9 @@
 data "template_file" "content" {
-  template = file("${path.module}/example.fcc")
+  template = file("${path.module}/${var.ignition_file}")
 }
 
 data "template_file" "handler" {
-  template = templatefile(
-        "${path.module}/handler.tpl",
-        {
-            content = data.template_file.content.rendered
-        }
-    )
+  template = file("${path.module}/handler.tpl")
 }
 
 data "archive_file" "lambda_zip" {
@@ -18,6 +13,10 @@ data "archive_file" "lambda_zip" {
   source {
     content  = data.template_file.handler.rendered
     filename = "index.js"
+  }
+  source {
+    content  = data.template_file.content.rendered
+    filename = "content.json"
   }
 }
 
