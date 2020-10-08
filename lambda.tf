@@ -47,19 +47,21 @@ resource "aws_iam_role" "iam_for_lambda_tf" {
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
+
+resource "aws_api_gateway_rest_api" "ApiGateway" {
+  name = var.api_name
+  description = var.api_description
+}
+
 #### METHODS
 # GET /
-resource "aws_api_gateway_method" "proxy_root" {
+resource "aws_api_gateway_method" "root" {
    rest_api_id   = aws_api_gateway_rest_api.ApiGateway.id
    resource_id   = aws_api_gateway_rest_api.ApiGateway.root_resource_id
    http_method   = "GET"
    authorization = "NONE"
 }
 
-resource "aws_api_gateway_rest_api" "ApiGateway" {
-  name = var.api_name
-  description = var.api_description
-}
 resource "aws_api_gateway_resource" "ignition" {
   rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
   parent_id = aws_api_gateway_rest_api.ApiGateway.root_resource_id
@@ -76,7 +78,7 @@ resource "aws_api_gateway_method" "get-ignition" {
 
 #############
 
-resource "aws_api_gateway_integration" "ApiProxyIntegration" {
+resource "aws_api_gateway_integration" "ignition" {
   rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
   resource_id = aws_api_gateway_resource.ignition.id
   http_method = "GET"
@@ -86,9 +88,19 @@ resource "aws_api_gateway_integration" "ApiProxyIntegration" {
   uri                     = aws_lambda_function.root_lambda.invoke_arn
 }
 
+
+resource "aws_api_gateway_integration" "root" {
+  rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
+  resource_id = aws_api_gateway_resource.root.id
+  http_method = "GET"
+
+  type = "AWS"
+  integration_http_method = "GET"
+  uri                     = aws_lambda_function.root_lambda.invoke_arn
+}
+
 resource "aws_api_gateway_deployment" "ApiDeployment" {
-  depends_on = [
-    aws_api_gateway_integration.ApiProxyIntegration]
+  depends_on = [aws_api_gateway_integration.ignition,aws_api_gateway_integration.root]
   rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
 
   stage_name = var.stage
