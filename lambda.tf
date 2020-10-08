@@ -29,13 +29,20 @@ resource "aws_lambda_function" "root_lambda" {
   runtime          = "nodejs12.x"
 }
     
+resource "aws_lambda_permission" "allow_gateway" {
+  statement_id  = "AllowExecutionFromGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.root_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+}
+
 ###### IAM ROLE
 data "aws_iam_policy_document" "assume_role" {
   statement {
-      actions= ["sts:AssumeRole", "lambda:InvokeFunction"]
+      actions= ["sts:AssumeRole"]
       principals {
           type="Service"
-          identifiers=["lambda.amazonaws.com", "apigateway.amazonaws.com"]
+          identifiers=["lambda.amazonaws.com"]
       }
       effect= "Allow"
   }
