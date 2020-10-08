@@ -3,7 +3,7 @@ data "template_file" "content" {
 }
 
 data "template_file" "handler" {
-  template = file("${path.module}/handler.tpl")
+  template = file("${path.module}/handler.js")
 }
 
 data "archive_file" "lambda_zip" {
