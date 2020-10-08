@@ -55,11 +55,6 @@ resource "aws_api_gateway_rest_api" "ApiGateway" {
 
 #### METHODS
 # GET /
-resource "aws_api_gateway_resource" "root" {
-  rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
-  parent_id = aws_api_gateway_rest_api.ApiGateway.root_resource_id
-  path_part = ""
-}
 resource "aws_api_gateway_method" "root" {
    rest_api_id   = aws_api_gateway_rest_api.ApiGateway.id
    resource_id   = aws_api_gateway_resource.root.id
@@ -86,21 +81,21 @@ resource "aws_api_gateway_method" "get-ignition" {
 resource "aws_api_gateway_integration" "ignition" {
   rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
   resource_id = aws_api_gateway_resource.ignition.id
-  http_method = "GET"
+  http_method = aws_api_gateway_method.ignition.http_method
 
   type = "AWS"
-  integration_http_method = "GET"
+  integration_http_method = "POST"
   uri                     = aws_lambda_function.root_lambda.invoke_arn
 }
 
 
 resource "aws_api_gateway_integration" "root" {
   rest_api_id = aws_api_gateway_rest_api.ApiGateway.id
-  resource_id = aws_api_gateway_resource.root.id
-  http_method = "GET"
+  resource_id = aws_api_gateway_rest_api.ApiGateway.root_resource_id
+  http_method = aws_api_gateway_method.root.http_method
 
-  type = "AWS"
-  integration_http_method = "GET"
+  type                    = "AWS_PROXY"
+  integration_http_method = "POST"
   uri                     = aws_lambda_function.root_lambda.invoke_arn
 }
 
