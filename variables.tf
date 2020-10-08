@@ -39,5 +39,6 @@ variable "subdomain" {
 
 variable "ignition_file"{
     type = string
-    default = "example.fcc"
+    description= "IGN file traspiled with FCCT from FCC file"
+    default = "example.ign"
 }
