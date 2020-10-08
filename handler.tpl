@@ -8,6 +8,5 @@ exports.handler = (event, context, callback) => {
         "statusCode": 200,s
         "body": JSON.stringify(content),
         "isBase64Encoded": false
-    };
-    );
+    });
 };
