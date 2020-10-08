@@ -5,7 +5,7 @@ data "archive_file" "lambda_zip" {
         {
             content = "${file("${path.module}/example.fcc")}"
         }
-    )
+    ).rendered
     output_path   = "lambda_function.zip"
 }
 
