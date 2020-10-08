@@ -28,6 +28,13 @@ resource "aws_lambda_function" "root_lambda" {
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
   runtime          = "nodejs12.x"
 }
+    
+resource "aws_lambda_permission" "allow_gateway" {
+  statement_id  = "AllowExecutionFromGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.test_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+}
 
 ###### IAM ROLE
 data "aws_iam_policy_document" "assume_role" {
