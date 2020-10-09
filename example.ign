@@ -7,7 +7,7 @@
       {
         "name": "core",
         "sshAuthorizedKeys": [
-          "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAgEAu/Ob0BQM8noqQkzHFaSoSgCNPv7ZKQcjJS+4ozvTcewdVwj1aziuvD89lctKMC9ErQLocmDY5wqHSWH0i3JDPUE86zc18OtlsM9Lii2O8HfNQMQ3QegshDu5ro67kSZCHarne5HCzrJ5rOboNHsTEHvk09O1GTn6eGXrxSkXByn8cht/j8wZOAqaCCCjkt/N/f1Rg35V/mhQYMU1EsqUHwPIKOFk+nxRBbaf1xcamGc0mi99c+tz+y+dMICOv/1gw1NDHEg8MWL2QIal0OqrdhSPICjf+0dIvQ0JpIyLJaLvFseIM3nkQ6ihw1FeuVc7cnZDuF6WKIyiYWnYcNKyOT+O/9CYuTZnLjqqwLwK9Gfo83jBhqCmtNG2Ei0P6Y+Y7wyz1CkwdwDQLOt/Ac6VhB55YLiyhXouFwt2xFvT+OUzJ9MjKXO9BC2+dm5usUBe6bLXnDjyGXcb0yzgYIIgs8UkPmAo1xmVOp9kaZu6ZcHiEOP5k9oMuDVJeF9Tq9sOfy9VJc+4klJc7nTcIRxlRjb72Y9nY1Els/qhICgyryZJqtojZcTL6F1CZ5r7KRV1K/Cd566C1Sgo0fMyEU8XD0awRXw3hIOAuo2/ZsSlHuOR+Rr9zw9xFWg9mDFJurqZt5AtXOw043HNG7IoADEv0/ttOalbRlvDyFZfmmMtjQM= techunter-rsa"
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINLhak3nJRF82xj9Tp83loIqXSnHqekqL4Bx0fQERI+d techunter-ed25519"
         ]
       }
     ]
