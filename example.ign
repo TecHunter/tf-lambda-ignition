@@ -6,9 +6,7 @@
     "users": [
       {
         "name": "core",
-        "sshAuthorizedKeys": [
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINLhak3nJRF82xj9Tp83loIqXSnHqekqL4Bx0fQERI+d techunter-ed25519"
-        ]
+        "sshAuthorizedKeys": ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINLhak3nJRF82xj9Tp83loIqXSnHqekqL4Bx0fQERI+d techunter-ed25519"]
       }
     ]
   }
